@@ -6,7 +6,7 @@
 // Add relevent #defines 
 #define PLUGIN_153
 #define PLUGIN_ID_153 153 // plugin id
-#define PLUGIN_NAME_153 "Communication - Hosea"
+#define PLUGIN_NAME_153 "Communication - VictronMPPT"
 
 # define P153_BAUDRATE           PCONFIG_LONG(0)
 # define P153_BAUDRATE_LABEL     PCONFIG_LABEL(0)
@@ -256,14 +256,14 @@ boolean Plugin_153(uint8_t function, struct EventStruct *event, String& string)
 
 			// if datastruct created
 			// // get command from string
-			// // if mommand == Hosea_write
+			// // if mommand == VictronMPPT_write
 			// // // Transmit data
-			// // else if command ==  Hosea_writemx
+			// // else if command ==  VictronMPPT_writemx
 			// // // Transmit data in Hex form
 			if ((nullptr != P153_data)) {
 				String cmd = parseString(string, 1);
 
-				if (equals(cmd, F("hosea_write"))) 
+				if (equals(cmd, F("VictronMPPT_write"))) 
 				{
 					// It seems this should work with newline???
 					// Otherswise concatenate a new line in the code
@@ -274,7 +274,7 @@ boolean Plugin_153(uint8_t function, struct EventStruct *event, String& string)
 					addLogMove(LOG_LEVEL_INFO, param1);                         // FIXME tonhuisman: Should we always want to write to the log?
 					success = true;
 				} 
-				else if (equals(cmd, F("hosea_writemix"))) 
+				else if (equals(cmd, F("VictronMPPT_writemix"))) 
 				{
 					std::vector<uint8_t> param1 = parseHexTextData(string);
 					P153_data->sendData(&param1[0], param1.size());
