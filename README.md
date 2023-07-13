@@ -1,34 +1,34 @@
 # ESPEasy-Victron-MPPT-Plugin
 This is a Plugin for the esspresif ESPEasy firmware that interptrets VE-direct Serial data from the Victron SmartSolar MPPT.
 
-[1. Simple Review](#1-Simple-Review)
+[1. Simple Review](#1-Review)
 
-[2. Technical Review](#2-Technical-Review)
+[2. Technical Review](#2-VEDirect-protocol)
 
 [3. How to Add to ESPEasy](#3-How-to-Add-to-ESPEasy)
 
 
-# 1 Simple Review
+# 1 Review
 
 An MPPT Charge Controller is a specialized battery charger designed to Maximise the yield from a solar panel array.
 Victron MPPT Charge Controllers, feature a VE.direct serial communication interface, allowing access to detailed information about the products operation.
 
 This plugin interptrets serial data from the MPPT and makes the data available to the user interface and other plugins in ESPEasy. 
 
-## 1.1 ESPeasy Web interface
+The structure and functionality of this plugin is based off of the already existing plugin, P087 [Serial Proxy](https://github.com/letscontrolit/ESPEasy/blob/mega/src/_P087_SerialProxy.ino).
+
+
+## 1.1 ESPEasy Web interface
 
 - Setting up the Task Settings:
 
 After adding the plugin, in the **Task settings**, is where you set up the plugin's name and serial parameters.
-Select an appropriate name, baudrate (where 19200mbps is the typicalbaudrate for Victron VE.Direct protocol), apprpriate GPIO pins and uart configurations (the **Serial Config**).
+Select an appropriate name, baudrate (where 19200mbps is the typicalbaudrate for Victron VE.Direct protocol), apprpriate GPIO pins and uart configurations (the **Serial Config**). Note, the plugin must be configured to use a hardware Serial port of your chosen ESP module. Thus a particular ESP8266 might not work since they typically only one serial port to receive serial data which is already used by the firmware.
+
 Then enable the plugin to load the other settings. An example of **task Settings** can be viewed below
 ![alt text](https://github.com/Hosea77S/ESPEasy-Victron-MPPT-Plugin/blob/main/Images/Devices_Page.png)
 
-- The Devices page:
-
-
-
-- Device Settings Feild selection:
+- Device Settings Field selection:
 
 In the Victron VE.FDirect documentation, they describe the serial information is sent as one long string that can be broken down into a list of fields.
 Each field consists of a **Label** and a **Value**. A short list of fields sent by the MPPT can be seen below:
@@ -93,23 +93,21 @@ In addition, if correctly setup, you can see the Dummy devices Value being set w
 
 Once you've setup the OLED device, with the lines to display, you can select the Dummy devices value as `[DUM#Value]`. The after saving the MPPT I value will be displayed oin the screen. I know, very Complicated...
 
-# 2 Technical Review
+![alt text](https://github.com/Hosea77S/ESPEasy-Victron-MPPT-Plugin/blob/main/Images/OLED_setup.png)
 
-## 2.1 VEDirect protocol
+# 2 VEDirect protocol
 
-VE.Direct is a UART communication protocol developed by Victron Energy themselves. It's featured in many of their products, including the MPPT Controller. The VE.Direct interface includes two modes: Text-mode and the HEX-mode. This plugin assumes text-mode.
+VE.Direct is a UART based communication protocol developed by Victron Energy themselves. It's featured in many of their products, including the MPPT Controller. The VE.Direct interface includes two modes: Text-mode and the HEX-mode. This plugin assumes text-mode.
 
 Serial port configuration is typically setup as shown:
 
-Baudrate:	19200
-
-Data bits:	8
-
-Parity:		None
-
-Stop bits:	1
-
-Flow Control: None
+| Serial parameter 	| Value 	|
+|------------------	|-------	|
+| Baudrate         	| 19200 	|
+| Data bits        	| 8     	|
+| Parity           	| None  	|
+| Stop bits        	| 1     	|
+| Flow Control     	| None  	|
 
 Devices typically transmit blocks of data at 1 second intervals. Withing that block are a set of fields. 
 Each field is sent using the following format:
@@ -126,15 +124,25 @@ Each field is sent using the following format:
 | Filed-Value 	| The ASCII formatted value of this field. The number of characters  transmitted depends on the magnitude and sign of the value. 	|
 
 
-## 2.2 SPEasy Plugin Structure
-
-- Explain similarity to serial proxy plugin
-
-## 2.3 Plugin data structure
-
-- explain what data struct does
-
-
 # 3 How to add to ESPEasy 
 
-- explain hopw to add plugin to list of plugins in a custom build of espeasy
+To add the plugin to your own custom build of ESPEasy depends on how many plugins exist in your build. This affects how you name your plugin. In the build I tested on, P153 was the next available plugin ID I could use. If There existed a P153 already, then i would rename it to P154. 
+
+Once you've identified the number of plugins you could use, its time to add the files to the relevant foders.
+
+Add the `_P153_VictronMPPT.ino` file in `/ESPEasy/src/` (assuming you use windows). Then add `P153_data_struct.h` and `P153_data_struct.cpp` in `ESPEasy\src\src\PluginStructs\`. Don't forget to rename the P153 part of the file names to the appropriate value as expressed above.
+
+Next, within the files themselves, you can simply find-and-replace each instance of "P153" to the apprpriate value. 
+
+Finally, in `ESPEasy\tools\pio\pre_custom_esp82xx.py` and/or `ESPEasy\tools\pio\pre_custom_esp32.py`, add the line 
+
+```python
+"-DUSES_P153",
+```
+ within the custom defines list.
+
+# Informal Acknowledgements 
+
+1. ESPEasy development team
+2. My supervisor
+3. Victron Energy documentation
