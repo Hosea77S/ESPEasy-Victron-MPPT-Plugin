@@ -1,21 +1,21 @@
 # ESPEasy-Victron-MPPT-Plugin
 This is a Plugin for the esspresif ESPEasy firmware that interptrets VE-direct Serial data from the Victron SmartSolar MPPT.
 
-[1 Simple Review](#1-Simple-Review)
+[1. Simple Review](#1.-Simple-Review)
 
-[2 Technical Review](#2-Technical-Review)
+[2. Technical Review](#2.-Technical-Review)
 
-[3 How to Add to ESPEasy](#3-How-to-Add-to-ESPEasy)
+[3. How to Add to ESPEasy](#3.-How-to-Add-to-ESPEasy)
 
 
-# 1 Simple Review
+# 1. Simple Review
 
 An MPPT Charge Controller is a specialized battery charger designed to Maximise the yield from a solar panel array.
 Victron MPPT Charge Controllers, feature a VE.direct serial communication interface, allowing access to detailed information about the products operation.
 
 This plugin interptrets serial data from the MPPT and makes the data available to the user interface and other plugins in ESPEasy. 
 
-## ESPeasy Web interface
+## 1.1 ESPeasy Web interface
 
 - Setting up the Task Settings:
 
@@ -61,7 +61,7 @@ If the value is `0` instead of a `one` it either means the value does not exist 
 
 ![alt text](https://github.com/Hosea77S/ESPEasy-Victron-MPPT-Plugin/blob/main/Images/Field_selection.png) 
 
-## Accessing Fields Example: Showing on OLED
+## 1.2 Accessing Fields Example: Showing on OLED
 
 - From example string shown, show rules setup with Dummy Device
 
@@ -93,22 +93,48 @@ In addition, if correctly setup, you can see the Dummy devices Value being set w
 
 Once you've setup the OLED device, with the lines to display, you can select the Dummy devices value as `[DUM#Value]`. The after saving the MPPT I value will be displayed oin the screen. I know, very Complicated...
 
-# 2 Technical Review
+# 2. Technical Review
 
-## VEDirect protocol
+## 2.1 VEDirect protocol
 
-- explain baudrate, modes
-- explain fields you can get from mppt 
+VE.Direct is a UART communication protocol developed by Victron Energy themselves. It's featured in many of their products, including the MPPT Controller. The VE.Direct interface includes two modes: Text-mode and the HEX-mode. This plugin assumes text-mode.
 
-## ESPEasy Plugin Structure
+Serial port configuration is typically setup as shown:
+
+Baudrate:	19200
+
+Data bits:	8
+
+Parity:		None
+
+Stop bits:	1
+
+Flow Control: None
+
+Devices typically transmit blocks of data at 1 second intervals. Withing that block are a set of fields. 
+Each field is sent using the following format:
+
+```
+<Newline><Field-Label><Tab><Field-Value>
+```
+
+| Identifier  	| Meaning                                                                                                                        	|
+|-------------	|--------------------------------------------------------------------------------------------------------------------------------	|
+| Newline     	| `\r\n` - Cariage return followed by a newline                                                                                  	|
+| Field-Label 	| An arbitrary length label that identifies the field                                                                            	|
+| Tab         	| `\t` - Horrizontal Tab                                                                                                         	|
+| Filed-Value 	| The ASCII formatted value of this field. The number of characters  transmitted depends on the magnitude and sign of the value. 	|
+
+
+## 2.2 SPEasy Plugin Structure
 
 - Explain similarity to serial proxy plugin
 
-## Plugin data structure
+## 2.3 Plugin data structure
 
 - explain what data struct does
 
 
-# 3 How to add to ESPEasy 
+# 3. How to add to ESPEasy 
 
 - explain hopw to add plugin to list of plugins in a custom build of espeasy
