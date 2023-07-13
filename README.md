@@ -1,14 +1,14 @@
 # ESPEasy-Victron-MPPT-Plugin
 This is a Plugin for the esspresif ESPEasy firmware that interptrets VE-direct Serial data from the Victron SmartSolar MPPT.
 
-[1. Simple Review](#1.-Simple-Review)
+[1. Simple Review](#1-Simple-Review)
 
-[2. Technical Review](#2.-Technical-Review)
+[2. Technical Review](#2-Technical-Review)
 
-[3. How to Add to ESPEasy](#3.-How-to-Add-to-ESPEasy)
+[3. How to Add to ESPEasy](#3-How-to-Add-to-ESPEasy)
 
 
-# 1. Simple Review
+# 1 Simple Review
 
 An MPPT Charge Controller is a specialized battery charger designed to Maximise the yield from a solar panel array.
 Victron MPPT Charge Controllers, feature a VE.direct serial communication interface, allowing access to detailed information about the products operation.
@@ -93,7 +93,7 @@ In addition, if correctly setup, you can see the Dummy devices Value being set w
 
 Once you've setup the OLED device, with the lines to display, you can select the Dummy devices value as `[DUM#Value]`. The after saving the MPPT I value will be displayed oin the screen. I know, very Complicated...
 
-# 2. Technical Review
+# 2 Technical Review
 
 ## 2.1 VEDirect protocol
 
@@ -135,6 +135,6 @@ Each field is sent using the following format:
 - explain what data struct does
 
 
-# 3. How to add to ESPEasy 
+# 3 How to add to ESPEasy 
 
 - explain hopw to add plugin to list of plugins in a custom build of espeasy
