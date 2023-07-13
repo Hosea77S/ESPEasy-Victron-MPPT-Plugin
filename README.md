@@ -18,6 +18,11 @@ This plugin interptrets serial data from the MPPT and makes the data available t
 ## ESPeasy Web interface
 
 - Explain serial page setup
+After adding the plugin, in the **Task settings**, is where you set up the plugin's name and serial parameters.
+Select an appropriate name, baudrate (where 19200mbps is the typicalbaudrate for Victron VE.Direct protocol), apprpriate GPIO pins and uart configurations (the **Serial Config**).
+Then enable the plugin to load the other settings. An example of **task Settings** can be viewed below
+![alt text](https://github.com/Hosea77S/ESPEasy-Victron-MPPT-Plugin/blob/main/Images/Devices_Page.png)
+
 - Show devices page
 - show feild selection and what a field is
 - show end of configuration setup
