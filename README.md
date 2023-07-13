@@ -64,8 +64,34 @@ If the value is `0` instead of a `one` it either means the value does not exist 
 ## Accessing Fields Example: Showing on OLED
 
 - From example string shown, show rules setup with Dummy Device
-- Show logs 
-- Shjow OLED setup
+
+According to the authors of ESPEasy, variables can be passed betwenn tasks and dummy devices. This section explains how to setup a dummy device, rules and an OLEd display to show the battery current value collected from the MPPT plugin.
+
+Firstly, setup a dummy device in Single value mode. That single value will be used to store the battery current value using rules.
+
+![alt text](https://github.com/Hosea77S/ESPEasy-Victron-MPPT-Plugin/blob/main/Images/Dummy_setup.png)
+
+Next, you can enable Rules and create a Set as shown in the code snippet below. The rule instructs ESPEasy to listyen for a an event from the MPPT plugin and uses the `substring` command to select the relevant value. Then uses `async` event to send the extracted value to an event called `MPPTvalue`. In the `MPPTValue` event, The command `TaskValueSet` selects the dummy device (which in this example is device number 4), and sets its `Value` parameter to the `eventvalue` delivered by `asyncevent`.
+
+```
+On MPPT#Value* do
+ asyncevent,MPPTValue={substring:0:4:%eventvalue1%}
+endon
+
+on MPPTValue do
+ TaskValueSet 4,1,%eventvalue1%
+endon
+```
+
+After saving the rule and rebooting ESPEasy, you should see something similar to this withing your logs. 
+
+![alt text](https://github.com/Hosea77S/ESPEasy-Victron-MPPT-Plugin/blob/main/Images/Logs.png)
+
+In addition, if correctly setup, you can see the Dummy devices Value being set within the devices page.
+
+![alt text](https://github.com/Hosea77S/ESPEasy-Victron-MPPT-Plugin/blob/main/Images/Logs.png)
+
+Once you've setup the OLED device, with the lines to display, you can select the Dummy devices value as `[DUM#Value]`. The after saving the MPPT I value will be displayed oin the screen. I know, very Complicated...
 
 # 2 Technical Review
 
