@@ -89,7 +89,7 @@ After saving the rule and rebooting ESPEasy, you should see something similar to
 
 In addition, if correctly setup, you can see the Dummy devices Value being set within the devices page.
 
-![alt text](https://github.com/Hosea77S/ESPEasy-Victron-MPPT-Plugin/blob/main/Images/Logs.png)
+![alt text](https://github.com/Hosea77S/ESPEasy-Victron-MPPT-Plugin/blob/main/Images/DUM.png)
 
 Once you've setup the OLED device, with the lines to display, you can select the Dummy devices value as `[DUM#Value]`. The after saving the MPPT I value will be displayed oin the screen. I know, very Complicated...
 
